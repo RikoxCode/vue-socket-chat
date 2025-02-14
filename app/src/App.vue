@@ -3,9 +3,11 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <RouterView>
+  <div class="h-screen w-screen flex justify-center items-center">
+    <RouterView>
 
-  </RouterView>
+    </RouterView>
+  </div>
 </template>
 
 <style scoped>

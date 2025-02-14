@@ -1,9 +1,10 @@
 <script setup>
 import { ref } from 'vue';
-import { socket } from "@/services/socket-client";
 import random from 'random-string-generator';
-import router from "@/router/index.js";
+import router from "../router/index.js";
+import socketService from "../services/socket-client.service.js";
 
+const socket = socketService.getSocket()
 const userName = ref('');
 const roomCode = ref('');
 
@@ -17,6 +18,7 @@ const createRoom = () => {
 };
 
 const joinRoom = () => {
+  console.log('join room', roomCode.value, userName.value);
   if(roomCode.value === '') return;
   if(userName.value === '') return;
 
@@ -26,46 +28,20 @@ const joinRoom = () => {
 </script>
 
 <template>
-  <div class="m-12">
-    <div class="w-full flex justify-center">
-      <h1 class="text-3xl font-bold">Chat IO</h1>
-    </div>
-
-    <!-- (Room Creation / Room Joining) & User Name creation -->
-    <div class="flex justify-center items-center w-full mt-8">
-      <div class="flex-col justify-center mt-8 items-center w-1/4 bg-slate-300 shadow-2xl rounded-xl">
-        <div class="flex justify-center items-center w-full p-4">
-          <input v-model="userName" type="text" placeholder="Enter your name"
-                 class="w-full p-2 border-2 border-slate-500 text-center text-gray-700 font-bold rounded-md">
-        </div>
-        <div class="flex justify-center items-center w-full p-4">
-          <button @click="createRoom" class="w-full p-2 bg-slate-500 text-white rounded-md cursor-pointer hover:bg-slate-600">Create Room</button>
-        </div>
-
-        <div class="flex items-center w-7/8 mx-auto">
-          <hr class="flex-grow border-t border-gray-600">
-          <span class="px-3 text-gray-500">
-            or
-        </span>
-          <hr class="flex-grow border-t border-gray-600">
-        </div>
-
-        <div class="flex justify-center items-center w-full p-4">
-          <div class="flex w-full border border-gray-500 rounded-md overflow-hidden">
-            <input
-                type="text"
-                placeholder="Enter room code"
-                class="flex-1 p-2 outline-none"
-                v-model="roomCode"
-            />
-            <button
-                @click="joinRoom"
-                class="p-2 bg-slate-500 text-white cursor-pointer hover:bg-slate-600 m-[1px] rounded-r-lg"
-            >
-              Join
-            </button>
-          </div>
-        </div>
+  <!-- Room Creation / Joining -->
+  <div class='flex justify-center items-center w-full mt-12'>
+    <div class='w-1/3 bg-white p-6 rounded-2xl shadow-lg'>
+      <h2 class='text-xl font-bold text-center text-gray-800 mb-4'>Join or Create a Room</h2>
+      <input v-model='userName' type='text' placeholder='Enter your name' class='w-full p-3 border rounded-lg mb-4 text-center text-gray-700 font-bold' />
+      <button @click='createRoom' class='w-full p-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition'>Create Room</button>
+      <div class='flex items-center my-4'>
+        <hr class='flex-grow border-t border-gray-400'>
+        <span class='px-3 text-gray-500'>or</span>
+        <hr class='flex-grow border-t border-gray-400'>
+      </div>
+      <div class='flex w-full border border-gray-500 rounded-lg overflow-hidden'>
+        <input v-model='roomCode' type='text' placeholder='Enter room code' class='flex-1 p-3 outline-none' />
+        <button @click='joinRoom' @keyup.enter='joinRoom' class='p-3 bg-gray-800 text-white hover:bg-gray-700 transition'>Join</button>
       </div>
     </div>
   </div>
